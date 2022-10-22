@@ -1,229 +1,348 @@
+<!-- 
+NAME: James Vuong
+CLASS: CPSC 332
+ASSIGNMENT: HW4
+ASSIGNMENT: HW4
+LAST MODIFIED: 10/21/2022
+-->
+
+
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Quiz App</title>
-    <style>
-        *,
-        *::before,
-        *::after {
-            box-sizing: border-box;
-            font-family: Gotham Rounded;
-        }
-
-        :root {
-            --hue-neutral: 200;
-            --hue-wrong: 0;
-            --hue-correct: 145;
-        }
-
-        body {
-            --hue: var(--hue-neutral);
-            padding: 0;
-            margin: 0;
-            display: flex;
-            width: 100vw;
-            height: 100vh;
-            justify-content: center;
-            align-items: center;
-            background-color: hsl(var(--hue), 100%, 20%);
-        }
-
-        body.correct {
-            --hue: var(--hue-correct);
-        }
-
-        body.wrong {
-            --hue: var(--hue-wrong);
-        }
-
-        .container {
-            width: 800px;
-            max-width: 80%;
-            background-color: white;
-            border-radius: 5px;
-            padding: 10px;
-            box-shadow: 0 0 10px 2px;
-        }
-
-        .btn-grid {
-            display: grid;
-            grid-template-columns: repeat(2, auto);
-            gap: 10px;
-            margin: 20px 0;
-        }
-
-        .btn {
-            --hue: var(--hue-neutral);
-            border: 1px solid hsl(var(--hue), 100%, 30%);
-            background-color: hsl(var(--hue), 100%, 50%);
-            border-radius: 5px;
-            padding: 5px 10px;
-            color: white;
-            outline: none;
-        }
-
-        .btn:hover {
-            border-color: black;
-        }
-
-        .btn.correct {
-            --hue: var(--hue-correct);
-            color: black;
-        }
-
-        .btn.wrong {
-            --hue: var(--hue-wrong);
-        }
-
-        .start-btn,
-        .next-btn {
-            font-size: 1.5rem;
-            font-weight: bold;
-            padding: 10px 20px;
-        }
-
-        .controls {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .hide {
-            display: none;
-        }
-    </style>
-    <script>
-
-        // Add an event listener for the DOMContentLoaded event
-        window.addEventListener("DOMContentLoaded", domLoaded);
-
-        function domLoaded() {
-            const startButton = document.getElementById('start-btn')
-            const nextButton = document.getElementById('next-btn')
-            const questionContainerElement = document.getElementById('question-container')
-            const questionElement = document.getElementById('question')
-            const answerButtonsElement = document.getElementById('answer-buttons')
-
-            let shuffledQuestions, currentQuestionIndex
-            //using the domLoaded function because the buttons need to be rendered before we can
-            //add an event listener
-            startButton.addEventListener('click', startGame)
-            nextButton.addEventListener('click', () => {
-                currentQuestionIndex++
-                setNextQuestion()
-            })
-
-            function startGame() {
-                startButton.classList.add('hide')
-                shuffledQuestions = questions.sort(() => Math.random() - .5)
-                currentQuestionIndex = 0
-                questionContainerElement.classList.remove('hide')
-                setNextQuestion()
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Quiz App</title>
+        <style>
+            *, 
+            *::before,
+            *::after {
+                box-sizing: border-box;
+                font-family:sans-serif;
+                font-size: x-large;
+                text-align: center;
             }
-
-            function setNextQuestion() {
-                resetState()
-                showQuestion(shuffledQuestions[currentQuestionIndex])
+    
+            :root {
+                --hue-neutral: 200;
+                --hue-wrong: 0;
+                --hue-correct: 145;
             }
+    
+            body {
+                --hue: var(--hue-neutral);
+                padding: 0;
+                margin: 0;
+                display: flex;
+                width: 100vw;
+                height: 100vh;
+                justify-content: center;
+                align-items: center;
+                background-color: hsl(var(--hue), 100%, 20%);
+            }
+    
+            body.correct {
+                --hue: var(--hue-correct);
+            }
+    
+            body.wrong {
+                --hue: var(--hue-wrong);
+            }
+    
+            .container {
+                width: 800px;
+                max-width: 80%;
+                background-color: white;
+                border-radius: 5px;
+                padding: 10px;
+                box-shadow: 0 0 10px 2px;
+            }
+    
+            .btn-grid {
+                display: grid;
+                grid-template-columns: repeat(2, auto);
+                gap: 10px;
+                margin: 20px 0;
+            }
+    
+            .btn {
+                --hue: var(--hue-neutral);
+                border: 1px solid hsl(var(--hue), 100%, 30%);
+                background-color: hsl(var(--hue), 100%, 50%);
+                border-radius: 5px;
+                padding: 5px 10px;
+                padding: 5px 10px;
+                color: white;
+                outline: none;
+            }
+    
+            /* .ans */
+            .btn:hover {
+                border-color: black;
+            }
+    
+            .btn.correct {
+                --hue: var(--hue-correct);
+                color: black;
+            }
+    
+            .btn.wrong {
+                --hue: var(--hue-wrong);
+            }
+    
+            .start-btn,
+            .next-btn, 
+            .back-btn {
+                font-size: 1.0rem;
+                font-weight: bold;
+                padding: 10px 20px;
+            }
+    
+            .controls {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+    
+            .hide {
+                display: none;
+            }
+        </style>
+        <script>
+    
+            // Add an event listener for the DOMContentLoaded event
+            window.addEventListener("DOMContentLoaded", domLoaded);
+    
+            function domLoaded() {
+                const startButton = document.getElementById('start-btn')
+                const nextButton = document.getElementById('next-btn')
+                const backButton = document.getElementById('back-btn')
+                const questionContainerElement = document.getElementById('question-container')
+                const questionElement = document.getElementById('question')
+                const answerButtonsElement = document.getElementById('answer-buttons')
+                const answerInformationElement = document.getElementById('answerInformation')
+    
+                let shuffledQuestions, currentQuestionIndex
+                //using the domLoaded function because the buttons need to be rendered before we can
+                //add an event listener
+                startButton.addEventListener('click', startGame)
 
-            function showQuestion(question) {
-                questionElement.innerText = question.question
-                question.answers.forEach(answer => {
-                    const button = document.createElement('button')
-                    button.innerText = answer.text
-                    button.classList.add('btn')
-                    if (answer.correct) {
-                        button.dataset.correct = answer.correct
+                nextButton.addEventListener('click', () => {
+                    currentQuestionIndex++ 
+                    setNextQuestion()
+                    removeAnswerInfo()
+                })
+  
+                backButton.addEventListener('click', () => {
+                    currentQuestionIndex--
+                    setNextQuestion()
+                })
+    
+                function startGame() {
+                    startButton.classList.add('hide')
+                    backButton.classList.add('hide')
+                    // shuffledQuestions = questions.sort(() => Math.random() - .5)
+                    shuffledQuestions = questions.sort()
+                    currentQuestionIndex = 0
+                    questionContainerElement.classList.remove('hide')
+                    // answerInformationElement.classList.add('hide') //does this even do anything
+                    setNextQuestion()
+                    removeAnswerInfo()
+                }
+    
+                function setNextQuestion() {
+                    resetState()
+                    showQuestion(shuffledQuestions[currentQuestionIndex])
+                }
+    
+                function showQuestion(question, answerInfoText) {
+                    questionElement.innerText = question.question
+                    answerInformationElement.innerText = question.answerInfo
+                    question.answers.forEach(answer => {
+                        const button = document.createElement('button')
+                        button.innerText = answer.text
+                        button.classList.add('btn')
+                        if (answer.correct) {
+                            button.dataset.correct = answer.correct
+                        }
+                        button.addEventListener('click', selectAnswer)
+                        button.addEventListener('click', showAnswerInfo) 
+                        answerButtonsElement.appendChild(button)
+                    })
+                }
+    
+                function resetState() {
+                    clearStatusClass(document.body)
+                    nextButton.classList.add('hide')
+                    backButton.classList.add('hide')
+                    while (answerButtonsElement.firstChild) {
+                        answerButtonsElement.removeChild(answerButtonsElement.firstChild)
                     }
-                    button.addEventListener('click', selectAnswer)
-                    answerButtonsElement.appendChild(button)
-                })
-            }
-
-            function resetState() {
-                clearStatusClass(document.body)
-                nextButton.classList.add('hide')
-                while (answerButtonsElement.firstChild) {
-                    answerButtonsElement.removeChild(answerButtonsElement.firstChild)
                 }
-            }
-
-            function selectAnswer(e) {
-                const selectedButton = e.target
-                const correct = selectedButton.dataset.correct
-                setStatusClass(document.body, correct)
-                Array.from(answerButtonsElement.children).forEach(button => {
-                    setStatusClass(button, button.dataset.correct)
-                })
-                if (shuffledQuestions.length > currentQuestionIndex + 1) {
-                    nextButton.classList.remove('hide')
-                } else {
-                    startButton.innerText = 'Restart'
-                    startButton.classList.remove('hide')
+    
+                function selectAnswer(e) {
+                    const selectedButton = e.target
+                    const correct = selectedButton.dataset.correct
+                    setStatusClass(document.body, correct)
+                    Array.from(answerButtonsElement.children).forEach(button => {
+                        setStatusClass(button, button.dataset.correct)
+                    })
+                    if (shuffledQuestions.length > currentQuestionIndex + 1) {
+                        nextButton.classList.remove('hide')
+                        backButton.classList.remove('hide')
+                    } else { 
+                        startButton.innerText = 'Restart'
+                        startButton.classList.remove('hide')
+                    }
                 }
-            }
-
-            function setStatusClass(element, correct) {
-                clearStatusClass(element)
-                if (correct) {
-                    element.classList.add('correct')
-                } else {
-                    element.classList.add('wrong')
+    
+                function setStatusClass(element, correct) {
+                    clearStatusClass(element)
+                    if (correct) {
+                        element.classList.add('correct')
+                    } else { 
+                        element.classList.add('wrong')
+                    }
                 }
+    
+                function clearStatusClass(element) {
+                    element.classList.remove('correct')
+                    element.classList.remove('wrong')
+                }
+
+                function showAnswerInfo() {
+                    let answerInfo = document.createElement('div')
+                    var answerInfoText = document.createTextNode('This text displays additional information on the correct answer.')
+                    answerInfo.innerText = ''
+                    answerButtonsElement.appendChild(answerInfo)
+                    answerInfo.appendChild(answerInfoText);
+                    answerInfo.id = 'answerInformation';
+                    document.body.prepend(answerInfo);
+                    // var answerInfo = document.createElement('container')
+
+                }
+
+                function removeAnswerInfo() {
+                    if (document.getElementById("answerInformation") != null) {
+                        document.getElementById("answerInformation").remove();
+                    }
+                }
+    
+                const questions = [
+                    {
+                        question: 'What is the biggest state in the US in terms of land size?',
+                        answers: [
+                            { text: 'California', correct: false },
+                            { text: 'Texas', correct: false },
+                            { text: 'Washington', correct: false },
+                            { text: 'Alaska', correct: true },
+                        ],
+                        answerInfo: 'The closest we'
+                    },
+                    {
+                        question: 'The Gonzaga Bulldogs have never won an NCAA basketball championship.',
+                        answers: [
+                            { text: 'True', correct: true },
+                            { text: 'False', correct: false },
+                        ],
+                        answerInfo: 'The closest we'
+                    },
+                    {
+                        question: 'There are 27 letters in the English alphabet.',
+                        answers: [
+                            { text: 'True', correct: false },
+                            { text: 'False', correct: true },
+                        ],
+                        answerInfo: 'The closest we'
+                    },                    
+                    {
+                        question: 'How many months have 28 days in them?',
+                        answers: [
+                            { text: '0', correct: false },
+                            { text: '1', correct: false },
+                            { text: '2', correct: false },
+                            { text: '3', correct: false },
+                            { text: 'None', correct: false },
+                            { text: 'All', correct: true },
+                        ]
+                    },                    
+                    {
+                        question: 'Which team most recently won the NBA championship?',
+                        answers: [
+                            { text: 'Boston Celtics', correct: false },
+                            { text: 'Golden State Warriors', correct: true },
+                            { text: 'Los Angeles Lakers', correct: false },
+                            { text: 'Milwaukee Bucks', correct: false },
+                        ]
+                    },                    
+                    {
+                        question: 'Mark Few has been charged with a DUI.',
+                        answers: [
+                            { text: 'True', correct: true },
+                            { text: 'False', correct: false },
+                        ]
+                    },                    
+                    {
+                        question: 'How many Academy Awards has Leonardo DiCaprio won?',
+                        answers: [
+                            { text: '0', correct: false },
+                            { text: '1', correct: true },
+                            { text: '2', correct: false },
+                            { text: '3', correct: false },
+                        ]
+                    },                    
+                    {
+                        question: 'Wearing a mask during Dr. Olivares office hours is optional.',
+                        answers: [
+                            { text: 'True', correct: false },
+                            { text: 'False', correct: true },
+                        ]
+                    },                    
+                    {
+                        question: 'Finish the iconic line: "How much you wanna bet I can....."',
+                        answers: [
+                            { text: 'dunk on you', correct: false },
+                            { text: 'beat you in a foot race', correct: false },
+                            { text: 'throw this football over them mountains?', correct: true },
+                            { text: 'score a date with this girl', correct: false },
+                        ]
+                    },                    
+                    {
+                        question: 'Which stage of mitosis does a cell spend ~90% of its time?',
+                        answers: [
+                            { text: 'Interphase', correct: true },
+                            { text: 'Prophase', correct: false },
+                            { text: 'Metaphase', correct: false },
+                            { text: 'Anaphase', correct: false },
+                            { text: 'Telophase', correct: false },
+                        ]
+                    }
+                ]
             }
-
-            function clearStatusClass(element) {
-                element.classList.remove('correct')
-                element.classList.remove('wrong')
-            }
-
-            const questions = [
-                {
-                    question: 'This is a test question',
-                    answers: [
-                        { text: 'Correct Answer', correct: true },
-                        { text: 'Incorrect Answer', correct: false },
-                    ]
-                },
-                {
-                    question: 'This is another test question',
-                    answers: [
-                        { text: 'Correct Answer', correct: true },
-                        { text: 'Incorrect Answer', correct: false },
-                        { text: 'Incorrect Answer', correct: false },
-                        { text: 'Incorrect Answer', correct: false },
-                        { text: 'Incorrect Answer', correct: false },
-                        { text: 'Incorrect Answer', correct: false },
-                    ]
-                },
-                
-            ]
-        }
-    </script>
-</head>
-
-<body>
-    <div class="container">
-        <div id="question-container" class="hide">
-            <div id="question">Question</div>
-            <div id="answer-buttons" class="btn-grid">
-                <button class="btn">Answer 1</button>
-                <button class="btn">Answer 2</button>
-                <button class="btn">Answer 3</button>
-                <button class="btn">Answer 4</button>
+        </script>
+    </head>
+    
+    <body>
+        <div class="container">
+            <div id="question-container" class="hide">
+                <div id="question">Question</div>
+                <div id="answer-buttons" class="btn-grid">
+                    <button class="btn">Answer 1</button>
+                    <button class="btn">Answer 2</button>
+                    <button class="btn">Answer 3</button>
+                    <button class="btn">Answer 4</button>
+                </div>
+                <div id="answerInformation" class="answerInformation"></div>
+            </div>
+            <div class="controls">
+                <button id="start-btn" class="start-btn btn">Start</button>
+                <button id="back-btn" class="back-btn btn hide">Back</button>
+                <button id="next-btn" class="next-btn btn hide">Next</button>
             </div>
         </div>
-        <div class="controls">
-            <button id="start-btn" class="start-btn btn">Start</button>
-            <button id="next-btn" class="next-btn btn hide">Next</button>
-        </div>
-    </div>
-</body>
-
-
-
-</html>
+    </body>
+    
+    
+    
+    </html>
